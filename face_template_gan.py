@@ -51,10 +51,10 @@ class FaceTemplateGAN:
                                 model_disc=model_disc, opti_gen=opti_gen, opti_disc=opti_disc, cnf=cnf, c_loss=c_loss)
 
             '''save sample images:'''
-            if (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 10 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
-            if (epoch + 1) % 1000 == 0:
+            if (epoch + 1) % 100 == 0:
                 model_gen.save_weights('./models/model_gen' + str(epoch) + '_.h5')
                 model_disc.save_weights('./models/model_disc' + str(epoch) + '_.h5')
         '''save last weights'''
