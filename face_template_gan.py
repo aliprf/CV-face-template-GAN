@@ -4,22 +4,10 @@ from data_helper import DataHelper
 from confguration import Config
 
 import tensorflow as tf
-from tensorflow import keras
-from keras.callbacks import ModelCheckpoint
-from keras.optimizers import Adam
-import numpy as np
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
-import math
-from keras.callbacks import CSVLogger
 from datetime import datetime
-from sklearn.utils import shuffle
-import os
-from sklearn.model_selection import train_test_split
-from numpy import save, load, asarray
-import os.path
-import csv
-from skimage.io import imread
-import pickle
 
 
 class FaceTemplateGAN:
@@ -112,4 +100,3 @@ class FaceTemplateGAN:
             plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=5)
 
         plt.savefig('./sample_output/image_at_epoch_{:04d}.png'.format(epoch))
-        # plt.show()
