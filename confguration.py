@@ -6,9 +6,9 @@ class Config:
     annotation_path = _prefix_path + 'training_set/augmented/annotations/'
 
     image_input_size = 224
-    noise_input_size = 50
+    noise_input_size = 100
 
-    batch_size = 3
+    batch_size = 2000
     epochs = 50000
 
     num_of_landmarks = 136
