@@ -29,8 +29,8 @@ class FaceTemplateGAN:
         model_disc = net_model.get_discriminator_model()
 
         '''optimizer'''
-        opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, decay=1e-6)
+        opti_gen = tf.keras.optimizers.Adam(lr=1e-1, beta_1=0.9, beta_2=0.999, decay=1e-5)
+        opti_disc = tf.keras.optimizers.Adam(lr=2e-3, beta_1=0.9, beta_2=0.999, decay=1e-6)
 
         '''create sample generator'''
         dhp = DataHelper()
