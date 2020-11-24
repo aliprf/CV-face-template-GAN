@@ -17,17 +17,29 @@ class NetworkModels:
         x_1 = LeakyReLU()(x)
         x = Dropout(.3)(x_1)
 
-        x = Dense(256)(x)
+        x = Dense(cnf.noise_input_size)(x)
         x = BatchNormalization()(x)
         x = LeakyReLU()(x)
+        x = Add()([x, x_1])
+        x = Dropout(.3)(x)
+
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x_1 = LeakyReLU()(x)
+        x = Dropout(.3)(x_1)
+
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Add()([x, x_1])
         x = Dropout(.3)(x)
 
         x = Dense(256)(x)
         x = BatchNormalization()(x)
         x_2 = LeakyReLU()(x)
         x = Dropout(.3)(x_2)
-
         x = Dense(256)(x)
+
         x = BatchNormalization()(x)
         x = LeakyReLU()(x)
         x = Add()([x, x_2])
@@ -94,8 +106,8 @@ class NetworkModels:
         x = Add()([x, x_3])
         x = Dropout(.3)(x)
 
-        # outputs = Dense(1, activation='sigmoid')(x)
-        outputs = Dense(1)(x)
+        outputs = Dense(1, activation='sigmoid')(x)
+        # outputs = Dense(1)(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="disc_model")
         model.summary()
