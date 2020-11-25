@@ -19,10 +19,10 @@ class FaceTemplateGAN:
         model_gen = net_model.get_generator_model()
 
         model_disc = net_model.get_discriminator_model()
-        model_disc.load_weights('./models/model_disc1999_.h5')
+        model_disc.load_weights('./models/last_we_model_disc_.h5')
         # model_disc = tf.keras.models.load_model('./models/model_disc1999_.h5')
         '''noise'''
-        test_sample = tf.random.normal([9, cnf.noise_input_size])
+        test_sample = tf.random.normal([9, cnf.num_of_landmarks])
         out_fake = model_disc(test_sample)
         print('------------')
 
