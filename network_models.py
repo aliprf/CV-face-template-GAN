@@ -56,11 +56,30 @@ class NetworkModels:
         x = Add()([x, x_3])
         x = Dropout(.3)(x)
 
-        x = Dense(512)(x)
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x_3 = LeakyReLU()(x)
+        x = Dropout(.3)(x_3)
+
+        x = Dense(256)(x)
         x = BatchNormalization()(x)
         x = LeakyReLU()(x)
+        x = Add()([x, x_3])
+        x = Dropout(.3)(x)
+
+        x = Dense(cnf.num_of_landmarks)(x)
+        x = BatchNormalization()(x)
+        x_3 = LeakyReLU()(x)
+        x = Dropout(.3)(x_3)
+
+        x = Dense(cnf.num_of_landmarks)(x)
+        x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
+        x = Add()([x, x_3])
         x = Dropout(.5)(x)
+
         outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
+        # outputs = Dense(cnf.num_of_landmarks, activation='tanh')(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="gen_model")
         model.summary()

@@ -4,6 +4,7 @@ import numpy as np
 from numpy import save, load, asarray
 import os
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 
 class DataHelper:
@@ -38,8 +39,8 @@ class DataHelper:
         cnf = Config()
         annotation = load(point_path)
 
-        """for training we dont normalize COFW"""
-
+        '''test print '''
+        # self.test_image_print(img_name='1', img=np.zeros([224,224,3]), landmarks=annotation)
         '''normalize landmarks based on hyperface method'''
         width = cnf.image_input_size
         height = cnf.image_input_size
@@ -49,6 +50,14 @@ class DataHelper:
         for p in range(0, len(annotation), 2):
             annotation_norm.append((x_center - annotation[p]) / width)
             annotation_norm.append((y_center - annotation[p + 1]) / height)
+
+        '''denormalize for test'''
+        # landmarks_x, landmarks_y = self.create_landmarks(annotation_norm)
+        # plt.figure()
+        # plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#000000', s=15)
+        # plt.savefig('11.png')
+        ''''''
+
         return annotation_norm
 
     def create_landmarks(self, normal_lnd):
@@ -66,3 +75,22 @@ class DataHelper:
             landmark_arr_y.append(y)
 
         return landmark_arr_x, landmark_arr_y
+
+    def test_image_print(self, img_name, img, landmarks):
+        plt.figure()
+        plt.imshow(img)
+
+        landmarks_x = []
+        landmarks_y = []
+        for i in range(0, len(landmarks), 2):
+            landmarks_x.append(landmarks[i])
+            landmarks_y.append(landmarks[i + 1])
+
+        for i in range(len(landmarks_x)):
+            plt.annotate(str(i), (landmarks_x[i], landmarks_y[i]), fontsize=6, color='red')
+
+        plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#000000', s=15)
+        plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=8)
+        plt.savefig(img_name + '.png')
+        # plt.show()
+        plt.clf()

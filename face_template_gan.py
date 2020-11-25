@@ -11,8 +11,23 @@ from datetime import datetime
 
 
 class FaceTemplateGAN:
+    def test(self):
+        cnf = Config()
 
-    def train(self):
+        '''making models'''
+        net_model = NetworkModels()
+        model_gen = net_model.get_generator_model()
+
+        model_disc = net_model.get_discriminator_model()
+        model_disc.load_weights('./models/model_disc1999_.h5')
+        # model_disc = tf.keras.models.load_model('./models/model_disc1999_.h5')
+        '''noise'''
+        test_sample = tf.random.normal([9, cnf.noise_input_size])
+        out_fake = model_disc(test_sample)
+        print('------------')
+
+
+    def train(self, train_gen, train_disc):
         """"""
 
         cnf = Config()
@@ -29,8 +44,8 @@ class FaceTemplateGAN:
         model_disc = net_model.get_discriminator_model()
 
         '''optimizer'''
-        opti_gen = tf.keras.optimizers.Adam(lr=1e-1, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=2e-3, beta_1=0.9, beta_2=0.999, decay=1e-6)
+        opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
+        opti_disc = tf.keras.optimizers.Adam(lr=2e-4, beta_1=0.5, beta_2=0.999, decay=1e-6)
 
         '''create sample generator'''
         dhp = DataHelper()
@@ -54,14 +69,16 @@ class FaceTemplateGAN:
             if (epoch + 1) % 5 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
-            if (epoch + 1) % 100 == 0:
-                model_gen.save_weights('./models/model_gen' + str(epoch) + '_.h5')
-                model_disc.save_weights('./models/model_disc' + str(epoch) + '_.h5')
+            if (epoch + 1) % 50 == 0:
+                model_gen.save('./models/model_gen' + str(epoch) + '_.h5')
+                model_disc.save('./models/model_disc' + str(epoch) + '_.h5')
         '''save last weights'''
-        model_gen.save_weights('./models/model_gen_LAST.h5')
-        model_disc.save_weights('./models/model_disc_LAST.h5')
+        model_gen.save('./models/model_gen_LAST.h5')
+        model_disc.save('./models/model_disc_LAST.h5')
 
-    def train_step(self, epoch, step, real_data, model_gen, model_disc, opti_gen, opti_disc, cnf, c_loss):
+    @tf.function
+    def train_step(self, epoch, step, real_data, model_gen, model_disc, opti_gen, opti_disc, cnf, c_loss,
+                   train_gen, train_disc):
         """the train step"""
 
         '''creating noises'''
@@ -69,11 +86,11 @@ class FaceTemplateGAN:
         '''creating tape'''
         with tf.GradientTape() as tape_gen, tf.GradientTape() as tape_disc:
             '''generate data'''
-            generated_data = model_gen(noise)
+            generated_data = model_gen(noise, training=train_gen)
             '''discriminate'''
-            real_output = model_disc(real_data, training=True)
-            fake_output = model_disc(generated_data, training=True)
-            '''calculate lossws'''
+            real_output = model_disc(real_data, training=train_disc)
+            fake_output = model_disc(generated_data, training=train_disc)
+            '''calculate losses'''
             loss_gen = c_loss.generator_loss(fake_output=fake_output)
             real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output, fake_output=fake_output)
 
@@ -86,7 +103,8 @@ class FaceTemplateGAN:
         opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
 
         '''create output report:'''
-        tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc)
+        tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc,
+                 'real_loss:', real_loss, 'fake_loss:', fake_loss)
 
     def save_sample_images(self, model, epoch, test_input, dhp):
         predicted_data = model(test_input, training=False)
