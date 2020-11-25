@@ -40,7 +40,7 @@ class FaceTemplateGAN:
         net_model = NetworkModels()
         model_gen = net_model.get_generator_model()
         model_gen.trainable = train_gen
-        model_gen.load_weights('./models/last_we_model_gen39_.h5')
+        # model_gen.load_weights('./models/last_we_model_gen39_.h5')
 
         model_disc = net_model.get_discriminator_model()
         model_disc.trainable = train_disc
@@ -48,7 +48,7 @@ class FaceTemplateGAN:
 
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=2e-3, beta_1=0.5, beta_2=0.999, decay=1e-6)
+        opti_disc = tf.keras.optimizers.Adam(lr=1e-6, beta_1=0.5, beta_2=0.999, decay=1e-9)
 
         '''create sample generator'''
         dhp = DataHelper()
