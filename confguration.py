@@ -3,7 +3,7 @@ class Config:
     _prefix_path = '/media/data2/alip/FL/new_data/300W/'  # --> atlas
     # _prefix_path = '/media/ali/data/new_data/300W/'  # --> local
 
-    annotation_path = _prefix_path + 'training_set/augmented/annotations/'
+    annotation_path = _prefix_path + 'training_set/no_aug/annotations/'
 
     image_input_size = 224
     noise_input_size = 10

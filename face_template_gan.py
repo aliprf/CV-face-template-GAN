@@ -39,6 +39,7 @@ class FaceTemplateGAN:
         '''making models'''
         net_model = NetworkModels()
         model_gen = net_model.get_generator_model()
+        model_gen.load_weights('./models/last_we_model_gen39_.h5')
         model_gen.trainable = train_gen
 
         model_disc = net_model.get_discriminator_model()
