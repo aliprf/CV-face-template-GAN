@@ -43,7 +43,7 @@ class FaceTemplateGAN:
         model_gen.trainable = train_gen
 
         model_disc = net_model.get_discriminator_model()
-        # model_disc.load_weights('./models/we_model_disc4_.h5')
+        model_disc.load_weights('./models/last_we_model_disc_.h5')
         model_disc.trainable = train_disc
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
@@ -100,16 +100,13 @@ class FaceTemplateGAN:
             real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output, fake_output=fake_output)
 
         '''calculate gradient'''
-        if train_gen:
-            grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
-        if train_disc:
-            grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
+        grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
+        grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
 
         '''apply gradients to optimizers'''
-        if train_gen:
-            opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
-        if train_disc:
-            opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
+
+        opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
+        opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
 
         '''create output report:'''
         tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc,
