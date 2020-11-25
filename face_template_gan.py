@@ -44,7 +44,7 @@ class FaceTemplateGAN:
 
         model_disc = net_model.get_discriminator_model()
         model_disc.trainable = train_disc
-        model_disc.load_weights('./models/last_we_model_disc_.h5')
+        # model_disc.load_weights('./models/last_we_model_disc_.h5')
 
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
@@ -63,11 +63,14 @@ class FaceTemplateGAN:
         '''start train process'''
         for epoch in range(cnf.epochs):
             for batch_index in range(step_per_epoch):
+                '''creating noises'''
+                noise = tf.random.normal([cnf.batch_size, cnf.noise_input_size])
                 '''load annotation and images'''
                 real_data = dhp.get_batch_sample(batch_index=batch_index, x_train_filenames=x_train_filenames)
+                ''''''
                 self.train_step(epoch=epoch, step=batch_index, real_data=real_data, model_gen=model_gen,
                                 model_disc=model_disc, opti_gen=opti_gen, opti_disc=opti_disc, cnf=cnf, c_loss=c_loss,
-                                train_gen=train_gen, train_disc=train_disc)
+                                noise=noise)
 
             '''save sample images:'''
             if (epoch + 1) % 50 == 0:
@@ -82,13 +85,10 @@ class FaceTemplateGAN:
         model_gen.save('./models/model_gen_LAST.h5')
         model_disc.save('./models/model_disc_LAST.h5')
 
-    # @tf.function
-    def train_step(self, epoch, step, real_data, model_gen, model_disc, opti_gen, opti_disc, cnf, c_loss,
-                   train_gen, train_disc):
+    @tf.function
+    def train_step(self, epoch, step, real_data, model_gen, model_disc, opti_gen, opti_disc, cnf, c_loss,noise):
         """the train step"""
 
-        '''creating noises'''
-        noise = tf.random.normal([cnf.batch_size, cnf.noise_input_size])
         '''creating tape'''
         with tf.GradientTape() as tape_gen, tf.GradientTape() as tape_disc:
             '''generate data'''
@@ -100,14 +100,14 @@ class FaceTemplateGAN:
             loss_gen = c_loss.generator_loss(fake_output=fake_output)
             real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output, fake_output=fake_output)
 
-        '''calculate gradient'''
-        grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
-        grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
+            '''calculate gradient'''
+            grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
+            grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
 
-        '''apply gradients to optimizers'''
+            '''apply gradients to optimizers'''
 
-        opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
-        opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
+            opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
+            opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
 
         '''create output report:'''
         tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc,

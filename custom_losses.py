@@ -10,7 +10,7 @@ class CustomLosses:
         '''create loss obj'''
         cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
         '''calculate losses'''
-        real_loss = cross_entropy(tf.ones_like(real_output), real_output)
+        real_loss = cross_entropy(tf.ones_like(real_output) * 0.9, real_output)
         fake_loss = cross_entropy(tf.zeros_like(fake_output), fake_output)
         '''create total los'''
         total_loss = real_loss + fake_loss
