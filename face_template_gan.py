@@ -63,7 +63,8 @@ class FaceTemplateGAN:
                 '''load annotation and images'''
                 real_data = dhp.get_batch_sample(batch_index=batch_index, x_train_filenames=x_train_filenames)
                 self.train_step(epoch=epoch, step=batch_index, real_data=real_data, model_gen=model_gen,
-                                model_disc=model_disc, opti_gen=opti_gen, opti_disc=opti_disc, cnf=cnf, c_loss=c_loss)
+                                model_disc=model_disc, opti_gen=opti_gen, opti_disc=opti_disc, cnf=cnf, c_loss=c_loss,
+                                train_gen=train_gen, train_disc=train_disc)
 
             '''save sample images:'''
             if (epoch + 1) % 5 == 0:
