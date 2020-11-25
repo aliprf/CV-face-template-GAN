@@ -42,8 +42,8 @@ class DataHelper:
         '''test print '''
         # self.test_image_print(img_name='1', img=np.zeros([224,224,3]), landmarks=annotation)
         '''normalize landmarks based on hyperface method'''
-        width = cnf.image_input_size
-        height = cnf.image_input_size
+        width = 1  # cnf.image_input_size
+        height = 1  # cnf.image_input_size
         x_center = width / 2
         y_center = height / 2
         annotation_norm = []
@@ -68,8 +68,8 @@ class DataHelper:
         landmark_arr_y = []
 
         for j in range(0, len(normal_lnd), 2):
-            x = cnf.image_input_size//2 - float(normal_lnd[j]) * cnf.image_input_size
-            y = cnf.image_input_size//2 - float(normal_lnd[j + 1]) * cnf.image_input_size
+            x = cnf.image_input_size // 2 - float(normal_lnd[j])  # * cnf.image_input_size
+            y = cnf.image_input_size // 2 - float(normal_lnd[j + 1])  # * cnf.image_input_size
 
             landmark_arr_x.append(x)
             landmark_arr_y.append(y)
