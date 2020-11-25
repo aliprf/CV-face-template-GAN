@@ -73,7 +73,7 @@ class FaceTemplateGAN:
                                 noise=noise)
 
             '''save sample images:'''
-            if (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 100 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
             if (epoch + 1) % 1000 == 0:
@@ -85,7 +85,7 @@ class FaceTemplateGAN:
         model_gen.save('./models/model_gen_LAST.h5')
         model_disc.save('./models/model_disc_LAST.h5')
 
-    @tf.function
+    # @tf.function
     def train_step(self, epoch, step, real_data, model_gen, model_disc, opti_gen, opti_disc, cnf, c_loss,noise):
         """the train step"""
 
