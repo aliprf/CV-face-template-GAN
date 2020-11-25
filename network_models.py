@@ -125,9 +125,9 @@ class NetworkModels:
         x = Add()([x, x_3])
         x = Dropout(.5)(x)
 
-        outputs = Dense(1, activation='softmax')(x)
+        # outputs = Dense(1, activation='softmax')(x)
         # outputs = Dense(1, activation='sigmoid')(x)
-        # outputs = Dense(1)(x)
+        outputs = Dense(1)(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="disc_model")
         model.summary()
