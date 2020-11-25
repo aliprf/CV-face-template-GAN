@@ -68,7 +68,7 @@ class FaceTemplateGAN:
             if (epoch + 1) % 5 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
-            if (epoch + 1) % 10 == 0:
+            if (epoch + 1) % 5 == 0:
                 model_gen.save('./models/model_gen' + str(epoch) + '_.h5')
                 model_disc.save('./models/model_disc' + str(epoch) + '_.h5')
                 model_gen.save_weights('./models/we_model_gen' + str(epoch) + '_.h5')
