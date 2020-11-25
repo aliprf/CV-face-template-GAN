@@ -87,21 +87,25 @@ class FaceTemplateGAN:
         '''creating tape'''
         with tf.GradientTape() as tape_gen, tf.GradientTape() as tape_disc:
             '''generate data'''
-            generated_data = model_gen(noise, trainable=train_gen, training=True)
+            generated_data = model_gen(noise, training=True)
             '''discriminate'''
-            real_output = model_disc(real_data, trainable=train_disc, training=True)
-            fake_output = model_disc(generated_data, trainable=train_disc, training=True)
+            real_output = model_disc(real_data, training=True)
+            fake_output = model_disc(generated_data, training=True)
             '''calculate losses'''
             loss_gen = c_loss.generator_loss(fake_output=fake_output)
             real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output, fake_output=fake_output)
 
         '''calculate gradient'''
-        grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
-        grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
+        if train_gen:
+            grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
+        if train_disc:
+            grad_disc = tape_disc.gradient(loss_disc, model_disc.trainable_variables)
 
         '''apply gradients to optimizers'''
-        opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
-        opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
+        if train_gen:
+            opti_gen.apply_gradients(zip(grad_gen, model_gen.trainable_variables))
+        if train_disc:
+            opti_disc.apply_gradients(zip(grad_disc, model_disc.trainable_variables))
 
         '''create output report:'''
         tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc,
