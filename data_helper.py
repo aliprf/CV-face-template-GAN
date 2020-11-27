@@ -31,9 +31,20 @@ class DataHelper:
         pn_tr_path = cnf.annotation_path
 
         batch_x = x_train_filenames[batch_index * cnf.batch_size:(batch_index + 1) * cnf.batch_size]
-        pn_batch = np.array([self._load_and_normalize(pn_tr_path + file_name) for file_name in batch_x])
+        pn_batch = np.array([self._load_and_create_hm(pn_tr_path + file_name) for file_name in batch_x])
+        # pn_batch = np.array([self._load_and_normalize(pn_tr_path + file_name) for file_name in batch_x])
         pn_batch = tf.cast(pn_batch, tf.float32)
         return pn_batch
+
+    def _load_and_create_hm(self, point_path):
+        annotation = load(point_path)
+        hm = self.generate_hm(landmarks=annotation, width=28, height=28, s=1)
+        # '''test print'''
+        # plt.figure()
+        # plt.imshow(hm)
+        # plt.savefig('hm_tes')
+        hm = np.array(hm).reshape([hm.shape[0]*hm.shape[1]])
+        return hm
 
     def _load_and_normalize(self, point_path):
         cnf = Config()
@@ -75,6 +86,33 @@ class DataHelper:
             landmark_arr_y.append(y)
 
         return landmark_arr_x, landmark_arr_y
+
+    def __gaussian_k(self, x0, y0, sigma, width, height):
+        """ Make a square gaussian kernel centered at (x0, y0) with sigma as SD.
+        """
+        x = np.arange(0, width, 1, float)
+        y = np.arange(0, height, 1, float)[:, np.newaxis]
+        gaus = np.exp(-((x - x0) ** 2 + (y - y0) ** 2) / (2 * sigma ** 2))
+        gaus[gaus <= 0.01] = 0
+        return gaus
+
+    def generate_hm(self, height, width, landmarks, s=1.5):
+        Nlandmarks = len(landmarks)
+        hm = np.zeros((height, width, Nlandmarks // 2), dtype=np.float32)
+
+        j = 0
+        for i in range(0, Nlandmarks, 2):
+            x = landmarks[i]
+            y = landmarks[i + 1]
+
+            x = int(x // 8)
+            y = int(y // 8)
+
+            hm[:, :, j] = self.__gaussian_k(x, y, s, height, width)
+            j += 1
+        '''fuze all layers'''
+        hm = np.sum(hm, axis=-1)
+        return hm
 
     def test_image_print(self, img_name, img, landmarks):
         plt.figure()
