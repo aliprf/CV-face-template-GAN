@@ -74,7 +74,7 @@ class FaceTemplateGAN:
                                 noise=noise)
 
             '''save sample images:'''
-            if True or (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 50 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
             if (epoch + 1) % 200 == 0:
