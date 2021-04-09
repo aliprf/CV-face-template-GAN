@@ -69,12 +69,20 @@ class FaceTemplateGAN:
 
         for epoch in range(cnf.epochs):
             # self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
-            if (epoch + 1) % 50 == 0:
+            if epoch < 500 and (epoch + 1) % 30 == 0:
                 train_gen = not train_gen
                 train_disc = not train_disc
 
                 model_gen.trainable = train_gen
                 model_disc.trainable = train_disc
+
+                print('=================================')
+                print(' Generator is :' + str(train_gen))
+                print(' Discriminator is :' + str(train_disc))
+                print('=================================')
+            else:
+                model_gen.trainable = True
+                model_disc.trainable = True
 
                 print('=================================')
                 print(' Generator is :' + str(train_gen))
@@ -92,7 +100,7 @@ class FaceTemplateGAN:
                                 noise=noise)
 
             '''save sample images:'''
-            if (epoch + 1) % 50 == 0:
+            if (epoch + 1) % 20 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
             if (epoch + 1) % 1000 == 0:
