@@ -49,7 +49,7 @@ class FaceTemplateGAN:
 
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=1e-6, beta_1=0.5, beta_2=0.999, decay=1e-9)
+        opti_disc = tf.keras.optimizers.Adam(lr=1e-3, beta_1=0.5, beta_2=0.999, decay=1e-6)
 
         '''create sample generator'''
         dhp = DataHelper()
@@ -62,7 +62,20 @@ class FaceTemplateGAN:
         test_sample = tf.random.normal([9, cnf.noise_input_size])
 
         '''start train process'''
+        train_gen = False
+        train_disc = True
+        model_gen.trainable = train_gen
+        model_disc.trainable = train_disc
+
         for epoch in range(cnf.epochs):
+
+            if (epoch + 1) % 50 == 0:
+                train_gen = not train_gen
+                train_disc = not train_disc
+
+                model_gen.trainable = train_gen
+                model_disc.trainable = train_disc
+
             for batch_index in range(step_per_epoch):
                 '''creating noises'''
                 noise = tf.random.normal([cnf.batch_size, cnf.noise_input_size])
@@ -77,7 +90,7 @@ class FaceTemplateGAN:
             if (epoch + 1) % 50 == 0:
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
-            if (epoch + 1) % 200 == 0:
+            if (epoch + 1) % 1000 == 0:
                 model_gen.save('./models/model_gen' + str(epoch) + '_.h5')
                 model_disc.save('./models/model_disc' + str(epoch) + '_.h5')
                 model_gen.save_weights('./models/we_model_gen' + str(epoch) + '_.h5')
@@ -121,7 +134,8 @@ class FaceTemplateGAN:
 
         for i in range(predicted_data.shape[0]):
             plt.subplot(3, 3, i + 1)
-            hm_img = np.array(predicted_data[i]).reshape(28,28)
+            hm_img = np.array(predicted_data[i])
+            # hm_img = np.array(predicted_data[i]).reshape(28,28)
             plt.imshow(hm_img)
 
         plt.savefig('./sample_output/image_at_epoch_{:04d}.png'.format(epoch))

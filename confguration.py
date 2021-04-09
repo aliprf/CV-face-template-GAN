@@ -5,10 +5,12 @@ class Config:
 
     annotation_path = _prefix_path + 'training_set/no_aug/annotations/'
 
-    image_input_size = 224
-    noise_input_size = 100
+    image_input_size = 256
+    net_image_input_size = 256
+    noise_input_size = 500
 
-    batch_size = 2000
+    # batch_size = 100
+    batch_size = 500
     epochs = 50000
 
     num_of_landmarks = 136
