@@ -6,7 +6,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, Add,MaxPooling2D, Conv2D, Flatten,\
     Conv2DTranspose, BatchNormalization, \
     Activation, GlobalAveragePooling2D, DepthwiseConv2D,\
-    Dropout, ReLU, Concatenate, Input, GlobalMaxPool2D, LeakyReLU
+    Dropout, ReLU, Concatenate, Input, GlobalMaxPool2D, ReLU
 
 
 class NetworkModels:
@@ -22,7 +22,7 @@ class NetworkModels:
         if apply_batchnorm:
             result.add(tf.keras.layers.BatchNormalization())
 
-        result.add(tf.keras.layers.LeakyReLU())
+        result.add(tf.keras.layers.ReLU())
 
         return result
 
@@ -108,7 +108,7 @@ class NetworkModels:
     #
     #     batchnorm1 = tf.keras.layers.BatchNormalization()(conv)
     #
-    #     leaky_relu = tf.keras.layers.LeakyReLU()(batchnorm1)
+    #     leaky_relu = tf.keras.layers.ReLU()(batchnorm1)
     #
     #     zero_pad2 = tf.keras.layers.ZeroPadding2D()(leaky_relu)  # (bs, 33, 33, 512)
     #
@@ -122,62 +122,165 @@ class NetworkModels:
 
         inputs = tf.keras.Input(shape=(cnf.noise_input_size,))
         x = Dense(cnf.noise_input_size)(inputs)
-        x = BatchNormalization()(x)
-        x_1 = LeakyReLU()(x)
-        x = Dropout(.3)(x_1)
+        x_1 = BatchNormalization()(x)
 
         x = Dense(cnf.noise_input_size)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
+        x = Dense(cnf.noise_input_size)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(cnf.noise_input_size)(x)
+        x = BatchNormalization()(x)
         x = Add()([x, x_1])
-        x = Dropout(.3)(x)
+        x = ReLU()(x)
+        #
 
         x = Dense(128)(x)
         x = BatchNormalization()(x)
-        x_1 = LeakyReLU()(x)
-        x = Dropout(.3)(x_1)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x_1 = BatchNormalization()(x)
 
         x = Dense(128)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
         x = Add()([x, x_1])
-        x = Dropout(.5)(x)
+        x = ReLU()(x)
+
+        #
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x_1 = BatchNormalization()(x)
+
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = Add()([x, x_1])
+        x = ReLU()(x)
+
+        ####
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(256)(x)
+        x_2 = BatchNormalization()(x)
 
         x = Dense(256)(x)
         x = BatchNormalization()(x)
-        x_2 = LeakyReLU()(x)
-        x = Dropout(.5)(x_2)
-
+        x = ReLU()(x)
         x = Dense(256)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
         x = Add()([x, x_2])
-        x = Dropout(.5)(x)
+        x = ReLU()(x)
+
+        ##
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(256)(x)
+        x_2 = BatchNormalization()(x)
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = Add()([x, x_2])
+        x = ReLU()(x)
+
+        ########
 
         x = Dense(512)(x)
         x = BatchNormalization()(x)
-        x_3 = LeakyReLU()(x)
-        x = Dropout(.5)(x_3)
+        x = ReLU()(x)
+        x = Dense(512)(x)
+        x_3 = BatchNormalization()(x)
 
         x = Dense(512)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
         x = Add()([x, x_3])
-        x = Dropout(.5)(x)
+        x = ReLU()(x)
+
+        ################
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(512)(x)
+        x_3 = BatchNormalization()(x)
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = Add()([x, x_3])
+        x = ReLU()(x)
+
+        ######################
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x_3 = BatchNormalization()(x)
 
         x = Dense(1024)(x)
         x = BatchNormalization()(x)
-        x_3 = LeakyReLU()(x)
-        x = Dropout(.5)(x_3)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = Add()([x, x_3])
+        x = ReLU()(x)
+        ########################
 
         x = Dense(1024)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
-        x = Add()([x, x_3])
-        x = Dropout(.5)(x)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x_3 = BatchNormalization()(x)
 
-        outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
-        # outputs = Dense(cnf.flatten_img_size, activation='tanh')(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Dense(1024)(x)
+        x = BatchNormalization()(x)
+        x = Add()([x, x_3])
+        x = ReLU()(x)
+        #######################
+        x = Dropout(.2)(x)
+
+        # outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
+        outputs = Dense(cnf.flatten_img_size, activation='tanh')(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="gen_model")
         model.summary()
@@ -193,35 +296,93 @@ class NetworkModels:
         inputs = tf.keras.Input(shape=(cnf.num_of_landmarks))
         x = Dense(cnf.num_of_landmarks)(inputs)
         x = BatchNormalization()(x)
-        x_1 = LeakyReLU()(x)
-        x = Dropout(.3)(x_1)
+        x_1 = ReLU()(x)
+
+        x = Dense(cnf.num_of_landmarks)(x_1)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_1])
+
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x_1 = ReLU()(x)
+
+        x = Dense(128)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_1])
 
         x = Dense(256)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
-        x = Dropout(.3)(x)
+        x_2 = ReLU()(x)
 
         x = Dense(256)(x)
         x = BatchNormalization()(x)
-        x_2 = LeakyReLU()(x)
-        x = Dropout(.3)(x_2)
-
-        x = Dense(256)(x)
-        x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
         x = Add()([x, x_2])
-        x = Dropout(.3)(x)
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x_2 = ReLU()(x)
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_2])
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x_2 = ReLU()(x)
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_2])
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x_2 = ReLU()(x)
+
+        x = Dense(256)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_2])
 
         x = Dense(512)(x)
         x = BatchNormalization()(x)
-        x_3 = LeakyReLU()(x)
-        x = Dropout(.3)(x_3)
+        x_3 = ReLU()(x)
 
         x = Dense(512)(x)
         x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
+        x = ReLU()(x)
         x = Add()([x, x_3])
-        x = Dropout(.5)(x)
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x_3 = ReLU()(x)
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_3])
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x_3 = ReLU()(x)
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_3])
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x_3 = ReLU()(x)
+
+        x = Dense(512)(x)
+        x = BatchNormalization()(x)
+        x = ReLU()(x)
+        x = Add()([x, x_3])
 
         # outputs = Dense(1, activation='softmax')(x)
         # outputs = Dense(1, activation='sigmoid')(x)

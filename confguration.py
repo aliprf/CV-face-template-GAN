@@ -10,7 +10,7 @@ class Config:
     noise_input_size = 500
 
     # batch_size = 2
-    batch_size = 5000
+    batch_size = 1000
     epochs = 50000
 
     num_of_landmarks = 136

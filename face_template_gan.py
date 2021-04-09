@@ -49,7 +49,7 @@ class FaceTemplateGAN:
 
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=1e-3, beta_1=0.5, beta_2=0.999, decay=1e-6)
+        opti_disc = tf.keras.optimizers.Adam(lr=5e-3, beta_1=0.9, beta_2=0.999, decay=1e-6)
 
         '''create sample generator'''
         dhp = DataHelper()
