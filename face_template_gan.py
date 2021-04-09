@@ -69,7 +69,7 @@ class FaceTemplateGAN:
 
         for epoch in range(cnf.epochs):
 
-            if (epoch + 1) % 20 == 0:
+            if (epoch + 1) % 10 == 0:
                 train_gen = not train_gen
                 train_disc = not train_disc
 
