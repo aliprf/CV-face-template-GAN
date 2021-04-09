@@ -49,7 +49,7 @@ class FaceTemplateGAN:
 
         '''optimizer'''
         opti_gen = tf.keras.optimizers.Adam(lr=1e-2, beta_1=0.9, beta_2=0.999, decay=1e-5)
-        opti_disc = tf.keras.optimizers.Adam(lr=5e-3, beta_1=0.9, beta_2=0.999, decay=1e-6)
+        opti_disc = tf.keras.optimizers.Adam(lr=1e-3, beta_1=0.9, beta_2=0.999, decay=1e-6)
 
         '''create sample generator'''
         dhp = DataHelper()
@@ -69,17 +69,17 @@ class FaceTemplateGAN:
 
         for epoch in range(cnf.epochs):
             # self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
-            if (epoch + 1) % 100 == 0:
+            if epoch > 300 and (epoch + 1) % 100 == 0:
                 train_gen = not train_gen
                 train_disc = not train_disc
 
                 model_gen.trainable = train_gen
                 model_disc.trainable = train_disc
 
-            print('=================================')
-            print(' Generator is :' + str(train_gen))
-            print(' Discriminator is :' + str(train_disc))
-            print('=================================')
+                print('=================================')
+                print(' Generator is :' + str(train_gen))
+                print(' Discriminator is :' + str(train_disc))
+                print('=================================')
 
             for batch_index in range(step_per_epoch):
                 '''creating noises'''
@@ -117,7 +117,9 @@ class FaceTemplateGAN:
             fake_output = model_disc(generated_data, training=True)
             '''calculate losses'''
             loss_gen = c_loss.generator_loss(fake_output=fake_output)
-            real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output, fake_output=fake_output)
+            real_loss, fake_loss, loss_disc = c_loss.discriminator_loss(real_output=real_output,
+                                                                        fake_output=fake_output,
+                                                                        epoch=epoch)
 
             '''calculate gradient'''
             grad_gen = tape_gen.gradient(loss_gen, model_gen.trainable_variables)
