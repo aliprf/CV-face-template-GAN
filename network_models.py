@@ -279,8 +279,8 @@ class NetworkModels:
         #######################
         x = Dropout(.2)(x)
 
-        # outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
-        outputs = Dense(cnf.num_of_landmarks, activation='tanh')(x)
+        outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
+        # outputs = Dense(cnf.num_of_landmarks, activation='tanh')(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="gen_model")
         model.summary()
