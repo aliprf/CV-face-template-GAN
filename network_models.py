@@ -176,8 +176,8 @@ class NetworkModels:
         x = Add()([x, x_3])
         x = Dropout(.5)(x)
 
-        # outputs = Dense(cnf.flatten_img_size, activation='linear')(x)
-        outputs = Dense(cnf.flatten_img_size, activation='tanh')(x)
+        outputs = Dense(cnf.num_of_landmarks, activation='linear')(x)
+        # outputs = Dense(cnf.flatten_img_size, activation='tanh')(x)
 
         model = tf.keras.Model(inputs=inputs, outputs=outputs, name="gen_model")
         model.summary()
@@ -190,7 +190,7 @@ class NetworkModels:
     def get_discriminator_model(self):
         cnf = Config()
 
-        inputs = tf.keras.Input(shape=(cnf.flatten_img_size,))
+        inputs = tf.keras.Input(shape=(cnf.num_of_landmarks))
         x = Dense(cnf.num_of_landmarks)(inputs)
         x = BatchNormalization()(x)
         x_1 = LeakyReLU()(x)

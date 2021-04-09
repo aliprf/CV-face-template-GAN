@@ -68,7 +68,7 @@ class FaceTemplateGAN:
         model_disc.trainable = train_disc
 
         for epoch in range(cnf.epochs):
-
+            # self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             if (epoch + 1) % 10 == 0:
                 train_gen = not train_gen
                 train_disc = not train_disc
@@ -132,19 +132,6 @@ class FaceTemplateGAN:
         tf.print("->EPOCH: ", str(epoch), "->STEP: ", str(step), 'Loss_gen:', loss_gen, 'Loss_disc:', loss_disc,
                  'real_loss:', real_loss, 'fake_loss:', fake_loss)
 
-    def save_sample_images(self, model, epoch, test_input, dhp):
-        predicted_data = model(test_input, training=False)
-
-        fig = plt.figure(figsize=(15, 15))
-
-        for i in range(predicted_data.shape[0]):
-            plt.subplot(3, 3, i + 1)
-            hm_img = np.array(predicted_data[i])
-            # hm_img = np.array(predicted_data[i]).reshape(28,28)
-            plt.imshow(hm_img)
-
-        plt.savefig('./sample_output/image_at_epoch_{:04d}.png'.format(epoch))
-    #
     # def save_sample_images(self, model, epoch, test_input, dhp):
     #     predicted_data = model(test_input, training=False)
     #
@@ -152,9 +139,22 @@ class FaceTemplateGAN:
     #
     #     for i in range(predicted_data.shape[0]):
     #         plt.subplot(3, 3, i + 1)
-    #         landmarks_x, landmarks_y = dhp.create_landmarks(predicted_data[i])
-    #         plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=15)
-    #         plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#000000', s=10)
-    #         plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=5)
+    #         hm_img = np.array(predicted_data[i])
+    #         # hm_img = np.array(predicted_data[i]).reshape(28,28)
+    #         plt.imshow(hm_img)
     #
     #     plt.savefig('./sample_output/image_at_epoch_{:04d}.png'.format(epoch))
+    #
+    def save_sample_images(self, model, epoch, test_input, dhp):
+        predicted_data = model(test_input, training=False)
+
+        fig = plt.figure(figsize=(15, 15))
+
+        for i in range(predicted_data.shape[0]):
+            plt.subplot(3, 3, i + 1)
+            landmarks_x, landmarks_y = dhp.create_landmarks(predicted_data[i])
+            plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=15)
+            plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#000000', s=10)
+            plt.scatter(x=landmarks_x[:], y=landmarks_y[:], c='#fddb3a', s=5)
+
+        plt.savefig('./sample_output/image_at_epoch_{:04d}.png'.format(epoch))

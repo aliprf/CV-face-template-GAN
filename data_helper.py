@@ -31,8 +31,8 @@ class DataHelper:
         pn_tr_path = cnf.annotation_path
 
         batch_x = x_train_filenames[batch_index * cnf.batch_size:(batch_index + 1) * cnf.batch_size]
-        pn_batch = np.array([self._load_and_create_hm(pn_tr_path + file_name) for file_name in batch_x])
-        # pn_batch = np.array([self._load_and_normalize(pn_tr_path + file_name) for file_name in batch_x])
+        # pn_batch = np.array([self._load_and_create_hm(pn_tr_path + file_name) for file_name in batch_x])
+        pn_batch = np.array([self._load_and_normalize(pn_tr_path + file_name) for file_name in batch_x])
         pn_batch = tf.cast(pn_batch, tf.float32)
         return pn_batch
 
