@@ -69,7 +69,7 @@ class FaceTemplateGAN:
 
         for epoch in range(cnf.epochs):
             # self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
-            if epoch > 300 and (epoch + 1) % 100 == 0:
+            if epoch > 95 and (epoch + 1) % 50 == 0:
                 train_gen = not train_gen
                 train_disc = not train_disc
 

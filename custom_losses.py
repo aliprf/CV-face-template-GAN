@@ -13,7 +13,7 @@ class CustomLosses:
         real_loss = cross_entropy(tf.ones_like(real_output) * 0.9, real_output)
         fake_loss = cross_entropy(tf.zeros_like(fake_output), fake_output)
         '''create total los'''
-        if epoch < 200:
+        if epoch < 80:
             total_loss = real_loss
         else:
             total_loss = real_loss + fake_loss
