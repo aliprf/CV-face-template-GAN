@@ -48,8 +48,8 @@ class FaceTemplateGAN:
         # model_disc.load_weights('./models/last_we_model_disc_.h5')
 
         '''optimizer'''
-        opti_gen = tf.keras.optimizers.Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, decay=1e-7)
-        opti_disc = tf.keras.optimizers.Adam(lr=1e-4, beta_1=0.9, beta_2=0.999, decay=1e-7)
+        opti_gen = tf.keras.optimizers.Adam(lr=1e-4)
+        opti_disc = tf.keras.optimizers.Adam(lr=1e-4, beta_1=0.5)
 
         '''create sample generator'''
         dhp = DataHelper()
@@ -96,7 +96,7 @@ class FaceTemplateGAN:
                                 noise=noise)
 
             '''save sample images:'''
-            if (epoch + 1) % 20 == 0:
+            if (epoch + 1) % 10 == 0:
                 test_sample = tf.random.normal([9, cnf.noise_input_size])
                 self.save_sample_images(model=model_gen, epoch=epoch, test_input=test_sample, dhp=dhp)
             '''save weights'''
