@@ -48,8 +48,8 @@ class FaceTemplateGAN:
         # model_disc.load_weights('./models/last_we_model_disc_.h5')
 
         '''optimizer'''
-        opti_gen = tf.keras.optimizers.Adam(lr=1e-4)
-        opti_disc = tf.keras.optimizers.Adam(lr=1e-4, beta_1=0.5)
+        opti_gen = tf.keras.optimizers.Adam(lr=1e-2)
+        opti_disc = tf.keras.optimizers.Adam(lr=1e-8, beta_1=0.5)
 
         '''create sample generator'''
         dhp = DataHelper()

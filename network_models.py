@@ -328,60 +328,6 @@ class NetworkModels:
         x = ReLU()(x)
         x = Add()([x, x_2])
 
-        x = Dense(256)(x)
-        x = BatchNormalization()(x)
-        x_2 = ReLU()(x)
-
-        x = Dense(256)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_2])
-
-        x = Dense(256)(x)
-        x = BatchNormalization()(x)
-        x_2 = ReLU()(x)
-
-        x = Dense(256)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_2])
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x_3 = ReLU()(x)
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_3])
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x_3 = ReLU()(x)
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_3])
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x_3 = ReLU()(x)
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_3])
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x_3 = ReLU()(x)
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Add()([x, x_3])
-
         # outputs = Dense(1, activation='softmax')(x)
         # outputs = Dense(1, activation='sigmoid')(x)
         outputs = Dense(1)(x)
