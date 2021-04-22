@@ -7,7 +7,7 @@ class Config:
 
     image_input_size = 256
     net_image_input_size = 256
-    noise_input_size = 500
+    noise_input_size = 50
 
     # batch_size = 2
     batch_size = 1000

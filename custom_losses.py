@@ -10,14 +10,14 @@ class CustomLosses:
         '''create loss obj'''
         cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
         '''calculate losses'''
-        real_loss = cross_entropy(tf.ones_like(real_output) * 0.9, real_output)
+        real_loss = cross_entropy(tf.ones_like(real_output), real_output)
         fake_loss = cross_entropy(tf.zeros_like(fake_output), fake_output)
         '''create total los'''
-        if epoch < 30:
-            total_loss = real_loss
-        else:
-            total_loss = real_loss + fake_loss
-
+        # if epoch < 30:
+        #     total_loss = real_loss
+        # else:
+        #     total_loss = real_loss + fake_loss
+        total_loss = real_loss + fake_loss
         return real_loss, fake_loss, total_loss
 
     def generator_loss(self, fake_output):

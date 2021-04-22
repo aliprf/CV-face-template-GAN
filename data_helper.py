@@ -79,9 +79,8 @@ class DataHelper:
         landmark_arr_y = []
 
         for j in range(0, len(normal_lnd), 2):
-            x = cnf.image_input_size // 2 - float(normal_lnd[j])  # * cnf.image_input_size
-            y = cnf.image_input_size // 2 - float(normal_lnd[j + 1])  # * cnf.image_input_size
-
+            x = float(normal_lnd[j] * cnf.image_input_size) + cnf.image_input_size / 2.0
+            y = float(normal_lnd[j+1] * cnf.image_input_size) + cnf.image_input_size / 2.0
             landmark_arr_x.append(x)
             landmark_arr_y.append(y)
 
