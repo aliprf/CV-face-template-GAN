@@ -26,4 +26,4 @@ class CustomLosses:
         '''create loss obj'''
         cross_entropy = tf.keras.losses.BinaryCrossentropy(from_logits=True)
         loss = cross_entropy(tf.ones_like(fake_output), fake_output)
-        return loss
+        return loss * 10
