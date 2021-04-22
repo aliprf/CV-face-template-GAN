@@ -17,7 +17,7 @@ class CustomLosses:
         #     total_loss = real_loss
         # else:
         #     total_loss = real_loss + fake_loss
-        total_loss = real_loss + fake_loss
+        total_loss = real_loss + 10*fake_loss
         return real_loss, fake_loss, total_loss
 
     def generator_loss(self, fake_output):

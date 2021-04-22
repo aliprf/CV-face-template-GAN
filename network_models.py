@@ -207,25 +207,6 @@ class NetworkModels:
         x = Add()([x, x_2])
         x = ReLU()(x)
 
-        ########
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Dense(512)(x)
-        x_3 = BatchNormalization()(x)
-
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = ReLU()(x)
-        x = Dense(512)(x)
-        x = BatchNormalization()(x)
-        x = Add()([x, x_3])
-        x = ReLU()(x)
-
         #######################
         x = Dropout(.2)(x)
 
